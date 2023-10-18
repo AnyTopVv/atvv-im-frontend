@@ -1,7 +1,32 @@
 import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Form, message } from 'antd';
 import './index.less'
+import { deepClone } from '@/utils/objectUtils/deepClone';
+import { userLogin, userRegister } from './service';
+
+type FieldType = {
+  name?: string;
+  password?: string;
+  email?: string;
+};
 
 const Login = () => {
+
+  const onLoginFinish = (values: any) => {
+    const formData = deepClone(values);
+    userLogin(formData).then((res: any) => {
+      console.log(res);
+      message.success("登录成功！");
+    })
+  }
+
+  const onRegisterFinish = (values: any) => {
+    const formData = deepClone(values);
+    userRegister(formData).then((res: any) => {
+      console.log(res);
+      message.success("注册成功！");
+    })
+  };
 
   return (
     <div className='login-page'>
@@ -23,20 +48,54 @@ const Login = () => {
                       <div className="center-wrap">
                         <div className="section text-center">
                           <h4 className="mb-4 pb-3">登录</h4>
-                          <div className="form-group">
-                            <input type="text" name="logname" className="form-style" placeholder="你的用户名" id="logname"
-                              autoComplete="off" />
-                            <i className="input-icon uil uil-user"><UserOutlined /></i>
-                          </div>
-                          <div className="form-group !mt-2">
-                            <input type="password" name="logpass" className="form-style" placeholder="你的密码"
-                              id="logpass" autoComplete="off" />
-                            <i className="input-icon uil uil-lock-alt"><LockOutlined /></i>
-                          </div>
-                          <a href="#" className="btn mt-4">提交</a>
-                          <p className="mb-0 mt-4 text-center">
+                          <Form
+                            name="basic"
+                            initialValues={{ remember: true }}
+                            onFinish={onLoginFinish}
+                            autoComplete="off"
+                          >
+                            <Form.Item<FieldType>
+                              name="name"
+                              rules={[{ required: true, message: '请输入你的用户名！' }]}
+                              style={{
+                                marginBottom: '10px',
+                              }}
+                            >
+                              <div className="form-group">
+                                <input type="text" name="logname" className="form-style" placeholder="你的用户名" id="logname"
+                                  autoComplete="off" />
+                                <i className="input-icon uil uil-user"><UserOutlined /></i>
+                              </div>
+                            </Form.Item>
+
+                            <Form.Item<FieldType>
+                              // label="Password"
+                              name="password"
+                              rules={[{ required: true, message: '请输入你的密码！' }]}
+                              style={{
+                                marginBottom: '5px',
+                              }}
+                            >
+                              <div className="form-group !mt-2">
+                                <input type="password" name="logpass" className="form-style" placeholder="你的密码"
+                                  id="logpass" autoComplete="off" />
+                                <i className="input-icon uil uil-lock-alt"><LockOutlined /></i>
+                              </div>
+                            </Form.Item>
+
+                            <Form.Item
+                              style={{
+                                marginBottom: '5px',
+                              }}
+                            >
+                              <Button className="btn mt-4" htmlType="submit">提交</Button>
+                            </Form.Item>
+                          </Form>
+
+                          {/* <p className="mb-0 mt-4 text-center">
                             <a href="#0" className="link">忘记密码？</a>
-                          </p>
+                          </p> */}
+
                         </div>
                       </div>
                     </div>
@@ -45,22 +104,64 @@ const Login = () => {
                       <div className="center-wrap">
                         <div className="section text-center">
                           <h4 className="mb-4 pb-3">注册</h4>
-                          <div className="form-group">
-                            <input type="text" name="logname" className="form-style" placeholder="你的用户名" id="logname"
-                              autoComplete="off" />
-                            <i className="input-icon uil uil-user"><UserOutlined /></i>
-                          </div>
-                          <div className="form-group !mt-2">
-                            <input type="email" name="logemail" className="form-style" placeholder="你的邮箱" id="logemail"
-                              autoComplete="off" />
-                            <i className="input-icon uil uil-at"><MailOutlined /></i>
-                          </div>
-                          <div className="form-group !mt-2">
-                            <input type="password" name="logpass" className="form-style" placeholder="你的密码"
-                              id="logpass" autoComplete="off" />
-                            <i className="input-icon uil uil-lock-alt"><LockOutlined /></i>
-                          </div>
-                          <a href="#" className="btn mt-4">提交</a>
+                          <Form
+                            name="basic"
+                            initialValues={{ remember: true }}
+                            onFinish={onRegisterFinish}
+                            autoComplete="off"
+                          >
+                            <Form.Item<FieldType>
+                              name="name"
+                              rules={[{ required: true, message: '请输入你的用户名！' }]}
+                              style={{
+                                marginBottom: '5px',
+                              }}
+                            >
+                              <div className="form-group">
+                                <input type="text" name="logname" className="form-style" placeholder="你的用户名" id="logname"
+                                  autoComplete="off" />
+                                <i className="input-icon uil uil-user"><UserOutlined /></i>
+                              </div>
+                            </Form.Item>
+
+                            <Form.Item<FieldType>
+
+                              name="email"
+                              rules={[{ required: true, message: '请输入你的邮箱！' }]}
+                              style={{
+                                marginBottom: '5px',
+                              }}
+                            >
+                              <div className="form-group !mt-2">
+                                <input type="email" name="logemail" className="form-style" placeholder="你的邮箱" id="logemail"
+                                  autoComplete="off" />
+                                <i className="input-icon uil uil-at"><MailOutlined /></i>
+                              </div>
+                            </Form.Item>
+
+                            <Form.Item<FieldType>
+                              name="password"
+                              rules={[{ required: true, message: '请输入你的密码！' }]}
+                              style={{
+                                marginBottom: '5px',
+                              }}
+                            >
+                              <div className="form-group !mt-2">
+                                <input type="password" name="logpass" className="form-style" placeholder="你的密码"
+                                  id="logpass" autoComplete="off" />
+                                <i className="input-icon uil uil-lock-alt"><LockOutlined /></i>
+                              </div>
+                            </Form.Item>
+
+                            <Form.Item
+                              style={{
+                                marginBottom: '5px',
+                              }}
+                            >
+                              <Button className="btn mt-4" htmlType="submit">提交</Button>
+                            </Form.Item>
+                          </Form>
+
                         </div>
                       </div>
                     </div>

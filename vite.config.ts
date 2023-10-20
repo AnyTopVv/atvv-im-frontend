@@ -16,7 +16,8 @@ export default defineConfig({
     host: true,
     proxy: {
       '/user': {
-        target: 'https://im.lazysun.me',
+        // target: 'https://im.lazysun.me',
+        target: 'http://10.21.22.100:9527',
         changeOrigin: true,
       },
     },

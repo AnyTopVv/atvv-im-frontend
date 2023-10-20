@@ -3,6 +3,7 @@ import { Button, Form, message } from 'antd';
 import './index.less'
 import { deepClone } from '@/utils/objectUtils/deepClone';
 import { userLogin, userRegister } from './service';
+import { useNavigate } from 'react-router-dom';
 
 type FieldType = {
   name?: string;
@@ -11,20 +12,23 @@ type FieldType = {
 };
 
 const Login = () => {
+  const navigate = useNavigate();
 
   const onLoginFinish = (values: any) => {
     const formData = deepClone(values);
     userLogin(formData).then((res: any) => {
-      console.log(res);
       message.success("登录成功！");
+      const { access_token, refresh_token } = res.data.data;
+      localStorage.setItem('access_token', access_token);
+      localStorage.setItem('refresh_token', refresh_token);
+      navigate('/home');
     })
   }
 
   const onRegisterFinish = (values: any) => {
     const formData = deepClone(values);
-    userRegister(formData).then((res: any) => {
-      console.log(res);
-      message.success("注册成功！");
+    userRegister(formData).then(() => {
+      message.success("注册成功！马上登录吧！");
     })
   };
 

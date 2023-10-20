@@ -1,14 +1,14 @@
-import axios from 'axios'
+import { axiosInstance } from '@/utils/requestUtils/axiosInstance'
 import { UserLoginParams, UserRegisterParams } from './type';
 
 export const userLogin = (data: UserLoginParams) => {
-  return axios({
+  return axiosInstance({
     method: 'post',
     url: '/user/login',
     data: data,
-    // headers: {
-    //   'Content-Type': 'application/x-www-form-urlencoded'
-    // },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
   }).then(res => {
     if (res && res.status === 200) {
       return res;
@@ -21,13 +21,13 @@ export const userLogin = (data: UserLoginParams) => {
 };
 
 export const userRegister = (data: UserRegisterParams) => {
-  return axios({
+  return axiosInstance({
     method: 'post',
     url: '/user/register',
     data: data,
-    // headers: {
-    //   'Content-Type': 'application/x-www-form-urlencoded'
-    // },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
   }).then(res => {
     if (res && res.status === 200) {
       return res;
